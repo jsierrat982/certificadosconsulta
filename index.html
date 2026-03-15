@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Resultados | AP Laboratorio Clínico</title>
+    
+    <!-- Fuentes: Inter para legibilidad -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS para diseño moderno -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <style>
+        :root {
+            --brand-primary: #1e1b4b; /* Indigo 950 */
+            --brand-accent: #10b981;  /* Emerald 500 */
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f8fafc;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+
+        .input-focus-effect:focus {
+            box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.15);
+        }
+
+        /* Animación de carga */
+        .loader {
+            border-top-color: #10b981;
+            animation: spinner 0.6s linear infinite;
+        }
+
+        @keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Estilo personalizado para el logo */
+        .logo-container img {
+            max-height: 50px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
+        }
+    </style>
+</head>
+<body class="text-slate-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Navegación -->
+    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="logo-container">
+                        <!-- Placeholder del logo real -->
+                        <img src="logoAP.jpg" alt="AP Laboratorio Clínico" onerror="this.src='https://via.placeholder.com/180x50?text=AP+LABORATORIO'">
+                    </a>
+                </div>
+                <div class="hidden md:block">
+                    <div class="flex items-center space-gap-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-700 border border-emerald-100">
+                            <span class="w-2 h-2 mr-2 bg-emerald-500 rounded-full animate-pulse"></span>
+                            Sistema en línea
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative bg-slate-900 py-16 sm:py-24 overflow-hidden">
+        <div class="absolute inset-0 opacity-20">
+            <div class="absolute inset-0 bg-[radial-gradient(#334155_1px,transparent_1px)] [background-size:20px_20px]"></div>
+        </div>
+        <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-3xl sm:text-5xl font-extrabold text-white tracking-tight mb-4">
+                Tus resultados, <span class="text-emerald-400">al instante.</span>
+            </h1>
+            <p class="text-lg text-slate-300 max-w-2xl mx-auto">
+                Accede a tus certificados y reportes clínicos de forma segura. Privacidad garantizada bajo protocolos de seguridad avanzada.
+            </p>
+        </div>
+    </header>
+
+    <!-- Contenido Principal -->
+    <main class="flex-grow max-w-5xl mx-auto w-full px-4 -mt-12 mb-20 relative z-10">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Columna del Formulario (Principal) -->
+            <section class="lg:col-span-2">
+                <div class="glass-card rounded-2xl shadow-xl shadow-slate-200/50 p-6 sm:p-10">
+                    <div class="flex items-center space-x-3 mb-8">
+                        <div class="bg-indigo-50 p-3 rounded-xl">
+                            <i data-lucide="file-search" class="text-indigo-600 w-6 h-6"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-slate-900">Consulta de Exámenes</h2>
+                            <p class="text-sm text-slate-500">Completa los datos para descargar tu PDF</p>
+                        </div>
+                    </div>
+
+                    <form id="search-form" class="space-y-6">
+                        <div>
+                            <label for="doc-id" class="block text-sm font-semibold text-slate-700 mb-2">Número de Documento</label>
+                            <div class="relative group">
+                                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-500 transition-colors">
+                                    <i data-lucide="id-card" size="18"></i>
+                                </div>
+                                <input 
+                                    type="text" 
+                                    id="doc-id" 
+                                    class="block w-full pl-11 pr-4 py-4 bg-slate-50 border border-slate-200 rounded-xl text-slate-900 text-lg placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-emerald-500/20 focus:border-emerald-500 transition-all input-focus-effect"
+                                    placeholder="Sin puntos ni guiones"
+                                    inputmode="numeric"
+                                    maxlength="15"
+                                    required
+                                >
+                            </div>
+                        </div>
+
+                        <button type="submit" id="submit-btn" class="w-full bg-slate-900 hover:bg-slate-800 text-white font-bold py-4 px-6 rounded-xl transition-all flex items-center justify-center space-x-3 group active:scale-[0.98]">
+                            <div class="loader hidden w-5 h-5 border-2 border-white/30 rounded-full" id="btn-spinner"></div>
+                            <span id="btn-text">Descargar Resultados</span>
+                            <i data-lucide="download" class="w-5 h-5 group-hover:translate-y-1 transition-transform" id="btn-icon"></i>
+                        </button>
+                    </form>
+
+                    <!-- Historial Reciente -->
+                    <div id="history-container" class="mt-10 pt-8 border-t border-slate-100 hidden">
+                        <h4 class="text-xs font-bold text-slate-400 uppercase tracking-widest mb-4">Consulta Reciente</h4>
+                        <div id="history-list" class="flex flex-wrap gap-2"></div>
+                    </div>
+
+                    <!-- Mensajes de Estado -->
+                    <div id="status-message" class="mt-6 p-4 rounded-xl hidden flex items-start space-x-3 animate-in fade-in slide-in-from-bottom-2 duration-300">
+                        <div id="status-icon-container"></div>
+                        <div>
+                            <p id="status-text" class="text-sm font-medium"></p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Sidebar Informativo -->
+            <aside class="space-y-6">
+                <!-- Tarjeta de Ayuda -->
+                <div class="bg-indigo-900 text-white rounded-2xl p-6 shadow-lg shadow-indigo-900/20">
+                    <h3 class="flex items-center text-lg font-bold mb-4">
+                        <i data-lucide="info" class="mr-2 w-5 h-5 text-emerald-400"></i>
+                        Importante
+                    </h3>
+                    <ul class="space-y-4 text-sm text-indigo-100">
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle-2" class="mr-3 w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+                            Los resultados suelen estar listos en 24 horas.
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle-2" class="mr-3 w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+                            Asegúrate de tener un lector de PDF instalado.
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="check-circle-2" class="mr-3 w-4 h-4 text-emerald-400 flex-shrink-0 mt-0.5"></i>
+                            Usa el número de identidad del paciente, no del acudiente.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Botón de Soporte -->
+                <a href="https://wa.me/573155257405" target="_blank" class="flex items-center justify-center space-x-3 w-full bg-white border border-slate-200 p-4 rounded-2xl hover:bg-slate-50 transition-colors shadow-sm group">
+                    <div class="bg-green-100 p-2 rounded-lg text-green-600 group-hover:scale-110 transition-transform">
+                        <i data-lucide="message-circle" class="w-5 h-5"></i>
+                    </div>
+                    <div class="text-left">
+                        <p class="text-xs text-slate-500 font-medium">¿Necesitas ayuda?</p>
+                        <p class="text-sm font-bold text-slate-800">Soporte WhatsApp</p>
+                    </div>
+                </a>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-slate-100 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 border-l-4 border-emerald-500 pl-3">Dirección Técnica</h4>
+                    <p class="text-indigo-950 font-bold">Adriana Patiño Dorado</p>
+                    <p class="text-sm text-slate-500">Bacterióloga</p>
+                    <p class="text-sm text-slate-500 mb-2 italic">Esp. Salud Ocupacional y Riesgos Laborales</p>
+                    <p class="text-[10px] text-slate-400">Reg. 29813130 | Lic. 25-3192</p>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 border-l-4 border-emerald-500 pl-3">Ubicación</h4>
+                    <div class="flex items-start space-x-3 text-sm text-slate-600">
+                        <i data-lucide="map-pin" class="w-5 h-5 text-slate-400"></i>
+                        <p>Carrera 15 Este No 69-60 Sur<br>Juan Rey, Bogotá D.C.</p>
+                    </div>
+                    <div class="flex items-center space-x-3 text-sm text-slate-600 mt-4">
+                        <i data-lucide="phone" class="w-5 h-5 text-slate-400"></i>
+                        <p>+57 300 6568075</p>
+                    </div>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-slate-900 uppercase tracking-widest mb-6 border-l-4 border-emerald-500 pl-3">Calidad</h4>
+                    <p class="text-sm text-slate-600 leading-relaxed">
+                        Laboratorio clínico autorizado para procesamiento de baja y mediana complejidad, cumpliendo con los estándares de salud vigentes en Colombia.
+                    </p>
+                </div>
+            </div>
+            <div class="pt-8 border-t border-slate-50 text-center">
+                <p class="text-xs text-slate-400 font-medium">
+                    &copy; 2026 AP Laboratorio Clínico SGSST. Desarrollado con integridad profesional.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Inicializar Iconos de Lucide
+        lucide.createIcons();
+
+        const CONFIG = {
+            PDF_PATH: './Documentos/',
+            STORAGE_KEY: 'ap_lab_last_search_id'
+        };
+
+        const elements = {
+            form: document.getElementById('search-form'),
+            input: document.getElementById('doc-id'),
+            submitBtn: document.getElementById('submit-btn'),
+            btnText: document.getElementById('btn-text'),
+            btnSpinner: document.getElementById('btn-spinner'),
+            btnIcon: document.getElementById('btn-icon'),
+            statusBox: document.getElementById('status-message'),
+            statusText: document.getElementById('status-text'),
+            statusIconContainer: document.getElementById('status-icon-container'),
+            historyContainer: document.getElementById('history-container'),
+            historyList: document.getElementById('history-list')
+        };
+
+        /**
+         * Maneja la visualización de mensajes de estado con estilos de Tailwind
+         */
+        const showStatus = (msg, type = 'info') => {
+            const themes = {
+                success: {
+                    bg: 'bg-emerald-50',
+                    border: 'border border-emerald-100',
+                    text: 'text-emerald-800',
+                    icon: 'check-circle'
+                },
+                error: {
+                    bg: 'bg-red-50',
+                    border: 'border border-red-100',
+                    text: 'text-red-800',
+                    icon: 'alert-circle'
+                },
+                info: {
+                    bg: 'bg-blue-50',
+                    border: 'border border-blue-100',
+                    text: 'text-blue-800',
+                    icon: 'info'
+                }
+            };
+
+            const theme = themes[type];
+            
+            elements.statusBox.className = `mt-6 p-4 rounded-xl flex items-start space-x-3 animate-in fade-in slide-in-from-bottom-2 duration-300 ${theme.bg} ${theme.border}`;
+            elements.statusText.className = `text-sm font-medium ${theme.text}`;
+            elements.statusText.textContent = msg;
+            
+            elements.statusIconContainer.innerHTML = `<i data-lucide="${theme.icon}" class="${theme.text} w-5 h-5"></i>`;
+            elements.statusBox.classList.remove('hidden');
+            
+            lucide.createIcons();
+        };
+
+        /**
+         * Carga el historial de búsqueda desde LocalStorage
+         */
+        const updateHistoryUI = () => {
+            const lastSearch = localStorage.getItem(CONFIG.STORAGE_KEY);
+            if (lastSearch) {
+                elements.historyContainer.classList.remove('hidden');
+                elements.historyList.innerHTML = `
+                    <button type="button" onclick="loadFromHistory('${lastSearch}')" class="inline-flex items-center px-4 py-2 rounded-lg bg-white border border-slate-200 text-slate-600 text-sm font-medium hover:border-emerald-500 hover:text-emerald-600 transition-all shadow-sm group">
+                        <i data-lucide="history" class="w-4 h-4 mr-2 text-slate-400 group-hover:text-emerald-500"></i>
+                        ${lastSearch}
+                    </button>
+                `;
+                lucide.createIcons();
+            }
+        };
+
+        window.loadFromHistory = (id) => {
+            elements.input.value = id;
+            elements.form.dispatchEvent(new Event('submit'));
+        };
+
+        /**
+         * Lógica principal del formulario
+         */
+        elements.form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            // Limpiar ID (solo números)
+            const id = elements.input.value.trim().replace(/\D/g, '');
+            if (!id) {
+                showStatus('Por favor, ingresa un número de documento válido.', 'error');
+                return;
+            }
+
+            // Estado de Carga UI
+            elements.submitBtn.disabled = true;
+            elements.btnSpinner.classList.remove('hidden');
+            elements.btnIcon.classList.add('hidden');
+            elements.btnText.textContent = 'Verificando...';
+            elements.statusBox.classList.add('hidden');
+
+            const fileUrl = `${CONFIG.PDF_PATH}${id}.pdf`;
+
+            try {
+                // Usamos fetch para verificar si el archivo existe antes de abrirlo
+                const response = await fetch(fileUrl, { method: 'HEAD', cache: 'no-cache' });
+                
+                if (response.ok) {
+                    showStatus('Documento encontrado. Tu descarga comenzará en breve.', 'success');
+                    localStorage.setItem(CONFIG.STORAGE_KEY, id);
+                    updateHistoryUI();
+                    
+                    // Pequeño delay para feedback visual antes de abrir
+                    setTimeout(() => {
+                        window.open(fileUrl, '_blank');
+                    }, 1000);
+                } else {
+                    showStatus(`No encontramos resultados para el documento ${id}. Verifica que el número sea correcto o contacta a soporte si tu examen fue hace menos de 24h.`, 'error');
+                }
+            } catch (err) {
+                showStatus('Hubo un problema de conexión al intentar acceder al servidor.', 'error');
+            } finally {
+                elements.submitBtn.disabled = false;
+                elements.btnSpinner.classList.add('hidden');
+                elements.btnIcon.classList.remove('hidden');
+                elements.btnText.textContent = 'Descargar Resultados';
+            }
+        });
+
+        // Carga inicial
+        updateHistoryUI();
+    </script>
+</body>
+</html>
